@@ -31,7 +31,6 @@ def get_all_links(page):
             break
     return links    
 
-index=[]
 def add_to_index(index, keyword, url):
     for i in index:
         if i[0]==keyword:
@@ -60,7 +59,7 @@ def crawl_web(seed, max_depth):
         if not tocrawl:
             tocrawl,next_depth = next_depth,tocrawl
             depth = depth+1
-    return crawled
+    return index
 
 def lookup(index, keyword):
     for i in index:
