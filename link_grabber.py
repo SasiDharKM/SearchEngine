@@ -31,6 +31,18 @@ def get_all_links(page):
             break
     return links    
 
+def add_to_index(index, keyword, url):
+    for i in index:
+        if i[0]==keyword:
+            i[1].append(url)
+            return
+    index.append([keyword,[url]])
+
+def add_page_to_index(index, url, content):
+    words = content.split( )
+    for i in words:
+        add_to_index(index, word, url)
+        
 def crawl_web(seed, max_depth):
     tocrawl=[seed]
     crawled=[]
