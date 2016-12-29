@@ -1,10 +1,10 @@
 
 def get_page(url):
     try:
-        import urlib
-        return urlib.urlopen(url).read()
+        import urllib
+        return urllib.urlopen(url).read()
     except:
-        return ''
+        return ""
     
 def get_next_target(page):
     start_link = page.find('<a href=')
