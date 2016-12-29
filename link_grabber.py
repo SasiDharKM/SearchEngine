@@ -49,10 +49,13 @@ def crawl_web(seed, max_depth):
     crawled=[]
     next_depth=[]
     depth=0
+    index=[]
     while tocrawl and depth <= max_depth:
         page=tocrawl.pop()
         if page not in crawled:
-            union(next_depth,get_all_links(get_page(page)))
+            content = get_page(page)
+            add_page_to_index(index,page,content)
+            union(next_depth,get_all_links(content))
             crawled.append(page)
         if not tocrawl:
             tocrawl,next_depth = next_depth,tocrawl
