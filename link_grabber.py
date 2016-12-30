@@ -32,12 +32,15 @@ def get_all_links(page):
     return links    
 
 def add_to_index(index, keyword, url):
+    # format of index: [[keyword, [[url, count], [url, count],..]],...]
     for i in index:
         if i[0]==keyword:
-            if url not in entry[1]:
-                i[1].append(url)
+            for urls in i[1]:
+                if urls[0] == url:
+            i[1].append([url,0])
             return
-    index.append([keyword,[url]])
+    # not found, add new keyword to index
+    index.append([keyword,[[url,0]]])
 
 def add_page_to_index(index, url, content):
     words = content.split( )
