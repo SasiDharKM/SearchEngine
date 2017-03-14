@@ -72,7 +72,6 @@ def crawl_web(seed, max_depth):
     return index
 
 def lookup(index, keyword):
-    for i in index:
-        if i[0]==keyword:
-            return entry[1]
-    return []
+    if keyword in index:
+        return index[keyword]
+    return None
