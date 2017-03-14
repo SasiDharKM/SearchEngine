@@ -62,7 +62,7 @@ def crawl_web(seed, max_depth):
     crawled=[]
     next_depth=[]
     depth=0
-    index=[]
+    index={}
     while tocrawl and depth <= max_depth:
         page=tocrawl.pop()
         if page not in crawled:
