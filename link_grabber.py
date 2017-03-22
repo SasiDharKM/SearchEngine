@@ -116,3 +116,14 @@ def compute_ranks(graph):
 
 	return ranks
 
+def best_res(index, ranks, keyword):
+	pages = lookup(index, keyword)
+	if not pages:
+		return None
+	best_page =pages[0]
+	for res in pages:
+		if ranks[res] > ranks[best_page]:
+			best_page = res
+	return best_page
+
+
