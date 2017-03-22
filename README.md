@@ -12,4 +12,7 @@ This Project involes 3 general Steps
        to aid in the process of retrieval whe a query comes up.I have used the Hash table data structure for this 
        purpose as the searching for information in it is highly time efficient.
        
-## |Ranking Pages       
+## |Ranking Pages      
+       Now that the links has been indexed , we need to rank the webpages togive the best reult for a query.
+       I have used the rudimentary version of the famous pageRank algorithm to implement the ranking of database.
+       
