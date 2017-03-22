@@ -52,26 +52,67 @@ def add_page_to_index(index, url, content):
     words = content.split( )
     for i in words:
         add_to_index(index, word, url)
-        
+
+
+# web crawler for crawl-restriction by max_depth of search
+#def crawl_web(seed, max_depth):
+#    tocrawl=[seed]
+#    crawled=[]
+#    next_depth=[]
+#    depth=0
+#    index={}
+#    while tocrawl and depth <= max_depth:
+#        page=tocrawl.pop()
+#        if page not in crawled:
+#            content = get_page(page)
+#           add_page_to_index(index,page,content)
+#            union(next_depth,get_all_links(content))
+#            crawled.append(page)
+#       if not tocrawl:
+#            tocrawl,next_depth = next_depth,tocrawl
+#            depth = depth+1
+#    return index 
+
 def crawl_web(seed, max_depth):
     tocrawl=[seed]
     crawled=[]
-    next_depth=[]
-    depth=0
     index={}
+    graph={} # <url>:[list of pages it links to]
     while tocrawl and depth <= max_depth:
         page=tocrawl.pop()
         if page not in crawled:
             content = get_page(page)
             add_page_to_index(index,page,content)
-            union(next_depth,get_all_links(content))
+            outlinks=get_all_links(content)
+            graph[page] = outlinks
+            union(tocrawl,outlinks)
             crawled.append(page)
-        if not tocrawl:
-            tocrawl,next_depth = next_depth,tocrawl
-            depth = depth+1
-    return index
+    return index,graph
 
 def lookup(index, keyword):
     if keyword in index:
         return index[keyword]
     return None
+
+def compute_ranks(graph):
+	d = 0.8 #damping factor for pagerank
+	numloops = 10# determines the accuracy of rank
+
+	ranks = {}
+	npages = len(graph)
+	for page in graph:
+		ranks[page] = 1.0/npages
+
+	for i in range(0, numloops):
+		newranks={}
+		for page in graph:
+			newrank = (1-d)/npages
+			for node in graph:
+				if page in graph[node]:
+					newrank = newrank + d*(ranks[node] / len(graph[node])) #algorithm for page rank
+
+			newranks[page] = newrank
+		ranks = newranks
+
+	return ranks
+
