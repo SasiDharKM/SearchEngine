@@ -95,8 +95,8 @@ def lookup(index, keyword):
     return None
 
 def compute_ranks(graph):
-	d = 0.8 #damping factor for pagerank
-	numloops = 10# determines the accuracy of rank
+	d = 0.8  #damping factor for pagerank
+	numloops = 10 # determines the accuracy of rank
 
 	ranks = {}
 	npages = len(graph)
@@ -126,4 +126,26 @@ def best_res(index, ranks, keyword):
 			best_page = res
 	return best_page
 
+def quicksort_pages(pages, ranks):
+	#implementing the quicksort algorithm for ordering the search results efficiently
+
+	if not pages or len(pages) <= 1:
+		return pages
+	else:
+		pivot = ranks[pages[0]] # assigning pivot as the pivot element(usually random but doesn't matter) 
+		worse=[]
+		better=[]
+		for page in pages[1:]:
+			if ranks[page] <= pivot:
+				worse.append(page)
+			else:
+				better.append(page)
+
+		return quicksort_pages(better, ranks) + [pages[0]] + quicksort_pages(worse, ranks)
+
+
+def ordered_search(index, ranks, keyword):
+	# the method for returning the ordered search results
+	pages = lookup(index, keyword)
+	return quicksort(pages,ranks)
 
