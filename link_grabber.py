@@ -94,7 +94,21 @@ def lookup(index, keyword):
         return index[keyword]
     return None
 
-def compute_ranks(graph):
+def is_reciprocal_link(graph,source, destination, k):
+	if k == 0:
+		if destination == source:
+			return True
+		return False
+	if source in graph[destination]:
+		return True
+	for node in graph[destination]:
+		if is_reciprocal_link(graph, source, node, k-1):
+			return True
+	return False
+
+
+
+def compute_ranks(graph,k):
 	d = 0.8  #damping factor for pagerank
 	numloops = 10 # determines the accuracy of rank
 
@@ -108,8 +122,9 @@ def compute_ranks(graph):
 		for page in graph:
 			newrank = (1-d)/npages
 			for node in graph:
-				if page in graph[node]:
-					newrank = newrank + d*(ranks[node] / len(graph[node])) #algorithm for page rank
+				if page in graph[node]: # node links to page
+				  	if not is_reciprocal_link(graph, node, page, k): 
+				  		newrank = newrank + d*(ranks[node] / len(graph[node])) #algorithm for page rank
 
 			newranks[page] = newrank
 		ranks = newranks
