@@ -1,3 +1,4 @@
+#!/usr/bin/env python2.7
 
 def get_page(url):
     try:
