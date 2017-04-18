@@ -1,39 +1,40 @@
 #!/usr/bin/env python2.7
 
+
 def get_page(url):
     try:
         import urllib
         return urllib.urlopen(url).read()
-    except:
+    except ImportError:
         return ""
-    
+
 def get_next_target(page):
     start_link = page.find('<a href=')
-    if start_link==-1:
-        return None,0
+    if start_link == -1:
+        return None, 0
     start_quote = page.find('"', start_link)
     end_quote = page.find('"', start_quote + 1)
     url = page[start_quote + 1:end_quote]
     return url, end_quote
 
-def union(p,q):
+def union(p, q):
     for e in q:
         if e not in p:
             p.append(e)
-            
+   
 def get_all_links(page):
-    links=[]
+    links = []
     while True:
-        url,endpos =get_next_target(page)
+        url,endpos = get_next_target(page)
         if url:
             links.append(url)
-            page=page[endpos:]
+            page = page[endpos:]
         else:
             break
     return links    
 
 
-def record_user_click(index,keyword,url):
+def record_user_click(index, keyword, url):
     urls = lookup(index, keyword)
     if urls:
         for i in urls:
@@ -95,7 +96,7 @@ def lookup(index, keyword):
         return index[keyword]
     return None
 
-def is_reciprocal_link(graph,source, destination, k):
+def is_reciprocal_link(graph, source, destination, k):
 	if k == 0:
 		if destination == source:
 			return True
@@ -107,9 +108,7 @@ def is_reciprocal_link(graph,source, destination, k):
 			return True
 	return False
 
-
-
-def compute_ranks(graph,k):
+def compute_ranks(graph, k):
 	d = 0.8  #damping factor for pagerank
 	numloops = 10 # determines the accuracy of rank
 
@@ -119,7 +118,7 @@ def compute_ranks(graph,k):
 		ranks[page] = 1.0/npages
 
 	for i in range(0, numloops):
-		newranks={}
+		newranks = {}
 		for page in graph:
 			newrank = (1-d)/npages
 			for node in graph:
@@ -136,7 +135,7 @@ def best_res(index, ranks, keyword):
 	pages = lookup(index, keyword)
 	if not pages:
 		return None
-	best_page =pages[0]
+	best_page = pages[0]
 	for res in pages:
 		if ranks[res] > ranks[best_page]:
 			best_page = res
@@ -149,8 +148,8 @@ def quicksort_pages(pages, ranks):
 		return pages
 	else:
 		pivot = ranks[pages[0]] # assigning pivot as the pivot element(usually random but doesn't matter) 
-		worse=[]
-		better=[]
+		worse = []
+		better = []
 		for page in pages[1:]:
 			if ranks[page] <= pivot:
 				worse.append(page)
@@ -163,5 +162,4 @@ def quicksort_pages(pages, ranks):
 def ordered_search(index, ranks, keyword):
 	# the method for returning the ordered search results
 	pages = lookup(index, keyword)
-	return quicksort(pages,ranks)
-
+	return quicksort_pages(pages, ranks)
