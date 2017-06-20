@@ -133,6 +133,7 @@ def compute_ranks(graph, k):
 
 def best_res(index, ranks, keyword):
 	pages = lookup(index, keyword)
+	#finding the best page for a query
 	if not pages:
 		return None
 	best_page = pages[0]
@@ -147,7 +148,7 @@ def quicksort_pages(pages, ranks):
 	if not pages or len(pages) <= 1:
 		return pages
 	else:
-		pivot = ranks[pages[0]] # assigning pivot as the pivot element(usually random but doesn't matter) 
+		pivot = ranks[pages[0]] # assigning the starting element as the pivot element(usually random but doesn't matter) 
 		worse = []
 		better = []
 		for page in pages[1:]:
